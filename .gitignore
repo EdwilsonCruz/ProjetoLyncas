@@ -16,10 +16,11 @@ x64/
 x86/
 build/
 bld/
-googleBooks-backend/bin/
-googleBooks-backend/Bin/
-googleBooks-backend/obj/
-googleBooks-backend/Obj/
+googleBooks-backend/bin
+googleBooks-backend/Bin
+googleBooks-backend/obj
+googleBooks-backend/obj
+googleBooks-backend/Obj
 
 # Visual Studio Code
 .vscode/
@@ -52,3 +53,4 @@ googleBooks-backend/Obj/
 *.pidb
 *.svclog
 *.scc
+googleBooks-backend/obj/project.nuget.cache
