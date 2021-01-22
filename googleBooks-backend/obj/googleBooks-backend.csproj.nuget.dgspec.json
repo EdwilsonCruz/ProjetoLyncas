@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {}
+    "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {
+    "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
+        "projectUniqueName": "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
         "projectName": "googleBooks-backend",
-        "projectPath": "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
-        "packagesPath": "C:\\Users\\LOS PUTOS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\obj\\",
+        "projectPath": "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
+        "packagesPath": "C:\\Users\\ASUS-LAB245\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\LOS PUTOS\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ASUS-LAB245\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -83,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

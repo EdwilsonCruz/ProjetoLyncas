@@ -19,14 +19,13 @@ const globalButton = document.querySelector("#btnPesquisa");
 
 async function fetchAll(term) {
   const url = "http://localhost:5000/api/books/" + term;
-
   const resource = await fetch(url);
 
   const json = await resource.json();
   globalState.totalItens = json.totalItems;
   const jsonWithImprovedSearch = json.items.map((item) => {
     const { id, volumeInfo } = item;
-    console.log(volumeInfo);
+
     return {
       ...item,
       id,
@@ -54,6 +53,7 @@ async function handleButtonClick() {
   } else {
     alert("Campo pesquisa obrigatorio!");
     globalInputName.focus();
+    return false;
   }
 }
 
@@ -71,11 +71,43 @@ async function handleCheckedClick() {
   }
 }
 
+async function addFavorito(id) {
+  const url = "http://localhost:5000/api/book/" + id + "/favorite";
+  const resource = await fetch(url, {
+    method: "POST",
+  });
+  const json = await resource.json();
+
+  const jsonWithImprovedSearch = json;
+
+  globalState.loadingData = false;
+
+  M.toast({ html: "Cadastrado com Sucesso!", classes: "rounded" });
+  renderAddFavorito();
+}
+
+async function deleteFavorite(id) {
+  const url = "http://localhost:5000/api/book/" + id + "/favorite";
+  const resource = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const json = await resource.json();
+  console.log(json);
+
+  globalState.loadingData = false;
+  await fetchFavorites();
+  renderFavorites();
+}
+
 async function fetchFavorites() {
   const url = "http://localhost:5000/api/book/favorites";
   const resource = await fetch(url);
   const json = await resource.json();
-  console.log(json);
+
   const jsonWithImprovedSearch = json.map((item) => {
     return item;
   });
@@ -132,12 +164,12 @@ function renderFavorite(book) {
       <div class='book-card'>     
         <img class='flag' src="${imagemThumbnail}" alt="${titulo}" />
         <div class='data'>          
-          <input type="hidden" name="bookId" value="${id}"/> 
+          <input type="hidden" name="${id}" id="${id}" value="${id}"/> 
           <span class='language'>            
             <strong> ${descricao.substring(0, 150)}...</strong>
           </span>
         </div>
-        <i class="iremove material-icons">delete</i>
+        <i class="iremove material-icons" onclick="deleteFavorite(document.querySelector('#${id}').value)">delete</i>
       </div>
     </div>
   `;
@@ -159,15 +191,21 @@ function renderBook(book) {
       <div class='book-card'>
         <img class='flag' src="${flag}" alt="${volumeInfo.title}" />
         <div class='data'>          
-          <input type="hidden" name="bookId" value="${id}"/> 
+          <input type="hidden" name="${id}" id="${id}" value="${id}"/> 
           <span class='language'>            
             <strong> ${desc}..</strong>
           </span>
         </div>
         <div class='icon'>        
-          <i class=" iadd material-icons">add_circle</i>
+          <i class=" iadd material-icons" onclick="addFavorito(document.querySelector('#${id}').value)">add_circle</i>
         </div>  
       </div>
     </div>
   `;
+}
+
+function renderAddFavorito() {
+  var toastElement = document.querySelector(".toast");
+  var toastInstance = M.Toast.getInstance(toastElement);
+  toastInstance.dismiss();
 }
