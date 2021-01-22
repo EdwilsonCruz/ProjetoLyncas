@@ -26,8 +26,8 @@ h2 {
   align-items: center;
   justify-content: flex-start;
 }
-#inputName{
-width: 80%;
+#inputName {
+  width: 80%;
 }
 .data {
   margin-left: 8px;
@@ -36,7 +36,21 @@ width: 80%;
   align-items: flex-start;
   justify-content: flex-start;
 }
-
+.iadd {
+  color: #26a69a;
+  cursor: pointer;
+}
+.iremove {
+  color: red;
+  cursor: pointer;
+}
+.icon {
+  margin-right: 10px;
+  text-align: right;
+  align-self: flex-end;
+  width: 100px;
+  height: auto;
+}
 .language {
   font-size: 0.8rem;
 }

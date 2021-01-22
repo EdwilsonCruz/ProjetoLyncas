@@ -44,9 +44,10 @@ async function fetchAll(term) {
 
 async function handleButtonClick() {
   /**
-   * Obtendo todos os países do backend
+   * Obtendo todos os livros do backend
    * de forma assíncrona
    */
+
   if (globalInputName.value.trim() != "") {
     await fetchAll(globalInputName.value.trim());
     renderBooks();
@@ -136,7 +137,7 @@ function renderFavorite(book) {
             <strong> ${descricao.substring(0, 150)}...</strong>
           </span>
         </div>
-        <i class="material-icons">delete</i>
+        <i class="iremove material-icons">delete</i>
       </div>
     </div>
   `;
@@ -162,8 +163,10 @@ function renderBook(book) {
           <span class='language'>            
             <strong> ${desc}..</strong>
           </span>
-        </div>        
-          <i class="material-icons">add_circle</i>        
+        </div>
+        <div class='icon'>        
+          <i class=" iadd material-icons">add_circle</i>
+        </div>  
       </div>
     </div>
   `;
