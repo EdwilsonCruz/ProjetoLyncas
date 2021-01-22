@@ -22,37 +22,44 @@ namespace googleBooks_backend.Controllers
       _context = context;
     }
 
-    [Route("/api/book")]
+    [Route("/api/book/{id}/favorite")]
     [HttpPost]
     public async Task<Livro> PostAsync(string id)
     {
       var httpClient = new HttpClient();
       httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-      var response = await httpClient.GetAsync(new Uri("https://www.googleapis.com/books/v1/volumes?q=szF_pLGmJTQC&"));
+      var response = await httpClient.GetAsync(new Uri("https://www.googleapis.com/books/v1/volumes?q=" + id));
       var result = await response.Content.ReadAsStringAsync();
 
-
-      string l = result;
-
-      //var jsonObject = JsonConvert.DeserializeObject(result);
       dynamic obj = JsonConvert.DeserializeObject(result);
-      //      Console.WriteLine(obj);
-      Console.WriteLine();
-      Console.WriteLine();
-
       Livro livro = new Livro();
+
       //valores atribuidos da resposta
       livro.Id = obj.items[0].id;
-      livro.Titulo = obj.items[0].volumeInfo.title;
+      livro.Titulo = obj.items[0].volumeInfo.title is null ? "" : obj.items[0].volumeInfo.title;
       livro.Descricao = obj.items[0].volumeInfo.description;
       livro.ImagemThumbnail = obj.items[0].volumeInfo.imageLinks.smallThumbnail;
       //add data de entrada qnd é add na lista de favoritos.
       livro.DataEntrada = DateTime.Now;
+      //insert e salvando
       _context.Livros.Add(livro);
       _context.SaveChanges();
+
       return livro;
     }
 
+
+    [Route("/api/books/{term}")]
+    [HttpGet]
+    public async Task<string> GetLivroAsync(string term)
+    {
+      var httpClient = new HttpClient();
+      httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+      var response = await httpClient.GetAsync(new Uri("https://www.googleapis.com/books/v1/volumes?q=" + term + "&startIndex=0&maxResults=40"));
+      var result = await response.Content.ReadAsStringAsync();
+
+      return result;
+    }
 
     [Route("/api/book/favorites")]
     [HttpGet]
@@ -60,6 +67,7 @@ namespace googleBooks_backend.Controllers
     {
       return _context.Livros.AsNoTracking().ToList();
     }
+
     [Route("/api/book/{id}/favorite")]
     [HttpDelete]
     public Livro Delete(string id)

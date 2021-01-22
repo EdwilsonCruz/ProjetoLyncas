@@ -1,0 +1,12 @@
+{
+  "name": "googlebooks-frontend",
+  "version": "1.0.0",
+  "description": "projeto destinado para o teste da empresa Lyncas.",
+  "main": "index.html",
+  "scripts": {
+    "start": "",
+    "build": ""
+  },
+  "author": "Edwilson Cruz",
+  "license": "ISC"
+}

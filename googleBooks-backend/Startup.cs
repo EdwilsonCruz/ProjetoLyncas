@@ -11,18 +11,12 @@ using Microsoft.Extensions.Configuration;
 namespace googleBooks_backend
 {
   public class Startup
-  {
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public Startup(IConfiguration configuration)
-    {
-      Configuration = configuration;
-    }
-
-    public IConfiguration Configuration { get; }
+  { 
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddControllersWithViews();
+      services.AddCors();
+      services.AddMvc(options => options.EnableEndpointRouting = false);
       services.AddScoped<StoreDataContext, StoreDataContext>();
     }
 
@@ -33,15 +27,8 @@ namespace googleBooks_backend
       {
         app.UseDeveloperExceptionPage();
       }
-
-      app.UseRouting();
-      //app.UseMvc();
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller}/{action=Index}/{id?}");
-      });
+      app.UseCors(option => option.AllowAnyOrigin());;
+      app.UseMvc();
     }
   }
 }
