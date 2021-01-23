@@ -14,7 +14,7 @@ namespace googleBooks_backend.Controllers
 {
   [ApiController]
   [Route("[controller]")]
-  public class LivroControllers : ControllerBase
+  public class LivroControllers : Controller
   {
     private readonly StoreDataContext _context;
     public LivroControllers(StoreDataContext context)
@@ -69,8 +69,8 @@ namespace googleBooks_backend.Controllers
     }
 
     [Route("/api/book/{id}/favorite")]
-    [HttpDelete]
-    public Livro Delete(string id)
+    [HttpGet]
+    public Livro Get(string id)
     {
       var livroRemove = _context.Livros.AsNoTracking().Where(x => x.Id == id).FirstOrDefault();
       _context.Livros.Remove(livroRemove);

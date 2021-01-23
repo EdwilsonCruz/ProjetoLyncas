@@ -20,10 +20,11 @@ const globalButton = document.querySelector("#btnPesquisa");
 async function fetchAll(term) {
   const url = "http://localhost:5000/api/books/" + term;
   const resource = await fetch(url);
-
+  const itemsFilter = globalState.allFovorites;
   const json = await resource.json();
   globalState.totalItens = json.totalItems;
-  const jsonWithImprovedSearch = json.items.map((item) => {
+
+  let jsonWithImprovedSearch = json.items.map((item) => {
     const { id, volumeInfo } = item;
 
     return {
@@ -40,7 +41,11 @@ async function fetchAll(term) {
   globalState.allBooks = [...jsonWithImprovedSearch];
   globalState.loadingData = false;
 }
-
+//Inicio da aplicacao. start no final do codigo
+async function start() {
+  await fetchFavorites();
+  console.log(globalState.allFovorites);
+}
 async function handleButtonClick() {
   /**
    * Obtendo todos os livros do backend
@@ -77,23 +82,17 @@ async function addFavorito(id) {
     method: "POST",
   });
   const json = await resource.json();
-
-  const jsonWithImprovedSearch = json;
-
   globalState.loadingData = false;
 
   M.toast({ html: "Cadastrado com Sucesso!", classes: "rounded" });
-  renderAddFavorito();
+  document.querySelector("#" + id).parentElement.parentElement.style.display =
+    "none";
 }
 
 async function deleteFavorite(id) {
   const url = "http://localhost:5000/api/book/" + id + "/favorite";
-  const resource = await fetch(url, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  console.log(url);
+  const resource = await fetch(url);
 
   const json = await resource.json();
   console.log(json);
@@ -134,8 +133,18 @@ function renderFavorites() {
 
   globaldivBooks.innerHTML = renderedHTML;
 }
-function renderBooks() {
-  const { allBooks, totalItens } = globalState;
+async function renderBooks() {
+  const { allBooks, totalItens, allFovorites } = globalState;
+
+  for (let i = 0; i < allFovorites.length; i++) {
+    const element = allFovorites[i].id;
+    for (let j = 0; j < allBooks.length; j++) {
+      if (allBooks[j].id == element) {
+        allBooks.splice(j, 1);
+      }
+    }
+  }
+
   const booksToShow = allBooks
     .map((book) => {
       return renderBook(book);
@@ -158,15 +167,17 @@ function renderBooks() {
  * função para renderizar um livro */
 function renderFavorite(book) {
   const { id, titulo, descricao, imagemThumbnail } = book;
-
+  let flag = imagemThumbnail != undefined ? imagemThumbnail : "";
+  let desc = descricao != undefined ? descricao : "Nao há descricao";
+  desc = desc.substring(0, 150);
   return `
     <div class='col s12 m6 l4'>
       <div class='book-card'>     
-        <img class='flag' src="${imagemThumbnail}" alt="${titulo}" />
+        <img class='flag' src="${flag}" alt="${titulo}" />
         <div class='data'>          
           <input type="hidden" name="${id}" id="${id}" value="${id}"/> 
           <span class='language'>            
-            <strong> ${descricao.substring(0, 150)}...</strong>
+            <strong> ${desc}...</strong>
           </span>
         </div>
         <i class="iremove material-icons" onclick="deleteFavorite(document.querySelector('#${id}').value)">delete</i>
@@ -203,9 +214,4 @@ function renderBook(book) {
     </div>
   `;
 }
-
-function renderAddFavorito() {
-  var toastElement = document.querySelector(".toast");
-  var toastInstance = M.Toast.getInstance(toastElement);
-  toastInstance.dismiss();
-}
+start();
