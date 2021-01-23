@@ -95,9 +95,10 @@ async function deleteFavorite(id) {
   const resource = await fetch(url);
 
   const json = await resource.json();
-  console.log(json);
-
   globalState.loadingData = false;
+
+  M.toast({ html: "Removido dos Favoritos!", classes: "rounded" });
+
   await fetchFavorites();
   renderFavorites();
 }
