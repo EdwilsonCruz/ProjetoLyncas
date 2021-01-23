@@ -48,7 +48,21 @@ São 2 menus: Pesquisa, Meus favoritos
 * O App deve se comunicar com o Google Books API pelo backend .Net e não fazer uso de nenhuma lib
 * Você pode optar pelo padrão MVC ou Front-end separado.
 
-## Dúvidas? Envio da prova?
-`testes@lyncas.net`
+### Recursos usados
+Microsoft.AspNetCore.Mvc Version="2.2.0
+FileContextCore Version="3.4.0"
+Microsoft.EntityFrameworkCore Version="3.1.6"
 
-### Desde já obrigado pelo seu interesse e boa prova!
+** Front-end separado
+Usando fetch para fazer toda a chamada da api. 
+Materialize para o layout e interações em tela, o js do materialize usa Ajax.
+
+### Problemas
+** Cors
+Não consegui resolver quando o method era delete. Error de Origin null 
+** FileContextCore
+Nãp funciona com a versao 5.0.1 do Entity, como o projeto ja estava na versao 5 perdi um tempo pra acertar as versoes junto a documentação
+Opto por usar FileContextCore quando não tenho um banco de dados, disponivel.
+
+
+
