@@ -7,7 +7,17 @@ const globalState = {
   allFovorites: [],
   loadingData: true,
   totalItens: 0,
+  page:1,
+  perPage :40,
+  totalPage: 1,
 };
+
+const globalPagination = `<div>
+  <ul class='pagination'>
+    <li class='waves-effect'><a class='voltar' href='#!'><i class='material-icons'>chevron_left</i></a></li>
+    <li class="active"><a href="#!">1</a></li>
+    <li class="waves-effect"><a class='proxima' href="#!"><i class="material-icons">chevron_right</i></a></li>
+  </ul></div>`;
 
 /**
  * Variáveis globais que mapeiam elementos HTML
@@ -20,9 +30,9 @@ const globalButton = document.querySelector("#btnPesquisa");
 async function fetchAll(term) {
   const url = "http://localhost:5000/api/books/" + term;
   const resource = await fetch(url);
-  const itemsFilter = globalState.allFovorites;
+  const itemsFilter = globalallFovorites;
   const json = await resource.json();
-  globalState.totalItens = json.totalItems;
+  globaltotalItens = json.totalItems;
 
   let jsonWithImprovedSearch = json.items.map((item) => {
     const { id, volumeInfo } = item;
@@ -38,14 +48,16 @@ async function fetchAll(term) {
    * Atribuindo valores aos campos
    * através de cópia
    */
-  globalState.allBooks = [...jsonWithImprovedSearch];
-  globalState.loadingData = false;
+  globalallBooks = [...jsonWithImprovedSearch];
+  globalloadingData = false;
 }
+
 //Inicio da aplicacao. start no final do codigo
 async function start() {
   await fetchFavorites();
-  console.log(globalState.allFovorites);
+  console.log(globalallFovorites);
 }
+
 async function handleButtonClick() {
   /**
    * Obtendo todos os livros do backend
@@ -82,7 +94,7 @@ async function addFavorito(id) {
     method: "POST",
   });
   const json = await resource.json();
-  globalState.loadingData = false;
+  globalloadingData = false;
 
   M.toast({ html: "Cadastrado com Sucesso!", classes: "rounded" });
   document.querySelector("#" + id).parentElement.parentElement.style.display =
@@ -95,7 +107,7 @@ async function deleteFavorite(id) {
   const resource = await fetch(url);
 
   const json = await resource.json();
-  globalState.loadingData = false;
+  globalloadingData = false;
 
   M.toast({ html: "Removido dos Favoritos!", classes: "rounded" });
 
@@ -112,8 +124,8 @@ async function fetchFavorites() {
     return item;
   });
 
-  globalState.allFovorites = [...jsonWithImprovedSearch];
-  globalState.loadingData = false;
+  globalallFovorites = [...jsonWithImprovedSearch];
+  globalloadingData = false;
 }
 function renderFavorites() {
   const { allFovorites } = globalState;
@@ -122,19 +134,22 @@ function renderFavorites() {
       return renderFavorite(book);
     })
     .join("");
-
+    //Math.ceil(dadostabela.length / perPage)
+totalPage = 2;
   const renderedHTML = `
      <div>
        <h2>${allFovorites.length} favorito(s) encontrado(s)</h2>
        <div class='row'>
          ${booksToShow}
        </div>
+       ${ totalPage == 1 ? "" : globalPagination}
      </div>
   `;
 
   globaldivBooks.innerHTML = renderedHTML;
 }
-async function renderBooks() {
+
+async function renderBooks(){
   const { allBooks, totalItens, allFovorites } = globalState;
 
   for (let i = 0; i < allFovorites.length; i++) {
@@ -186,6 +201,7 @@ function renderFavorite(book) {
     </div>
   `;
 }
+
 function renderBook(book) {
   const { id, volumeInfo } = book;
   let desc =
@@ -215,4 +231,50 @@ function renderBook(book) {
     </div>
   `;
 }
+
+/** Paginação , inicio do controle que vai
+escrito em tela.
+**/
+
+const controls = {
+  next(){
+    globalState.page++
+    const lastPage = globalState.page > globalState.totalPage;
+    if (lastPage) {
+			globalState.page--;
+		}
+        
+		/* var elemPage = document.querySelector(".pagePrincipal");
+				elemPage.innerHTML = globalState.page; */
+  },
+  prev(){
+    globalState.page--
+    if(globalState.page<1){
+      globalState.page++
+		}
+		/* var elemPage = document.querySelector(".pagePrincipal");
+				elemPage.innerHTML = globalState.page; */
+  },
+  goTo(page){
+    if (page < 1){
+    	page = 1;
+    }
+    globalState.page = page;
+    if (page > globalState.totalPage) {
+      globalState.page = globalState.totalPage
+		}
+		document.querySelector(".pagePrincipal").innerHTML = globalState.page;
+	},
+	createListeners(){
+		document.querySelector(".proxima").addEventListener('click', () => {
+			controls.next();
+			update();
+		})
+		document.querySelector(".voltar").addEventListener('click', () => {
+			controls.prev();
+			update();
+		})
+	}
+}
+
 start();
