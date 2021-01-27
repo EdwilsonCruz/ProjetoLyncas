@@ -6,17 +6,18 @@ const globalState = {
   allBooks: [],
   allFovorites: [],
   loadingData: true,
-  totalItens: 0,
+  totalItems: 0,
   page:1,
   perPage :40,
   totalPage: 1,
+  start:0, end:9,
 };
 
 const globalPagination = `<div>
   <ul class='pagination'>
-    <li class='waves-effect'><a class='voltar' href='#!'><i class='material-icons'>chevron_left</i></a></li>
-    <li class="active"><a href="#!">1</a></li>
-    <li class="waves-effect"><a class='proxima' href="#!"><i class="material-icons">chevron_right</i></a></li>
+    <li class='waves-effect'><a class='voltar'><i class='material-icons'>chevron_left</i></a></li>
+    <li class="active"><a href="">1</a></li>
+    <li class="waves-effect"><a class='proxima'><i class="material-icons">chevron_right</i></a></li>
   </ul></div>`;
 
 /**
@@ -30,9 +31,10 @@ const globalButton = document.querySelector("#btnPesquisa");
 async function fetchAll(term) {
   const url = "http://localhost:5000/api/books/" + term;
   const resource = await fetch(url);
-  const itemsFilter = globalallFovorites;
+  const itemsFilter = globalState.allFovorites;
   const json = await resource.json();
-  globaltotalItens = json.totalItems;
+  
+  globalState.totalItems = json.totalItems
 
   let jsonWithImprovedSearch = json.items.map((item) => {
     const { id, volumeInfo } = item;
@@ -48,14 +50,14 @@ async function fetchAll(term) {
    * Atribuindo valores aos campos
    * através de cópia
    */
-  globalallBooks = [...jsonWithImprovedSearch];
-  globalloadingData = false;
+  globalState.allBooks = [...jsonWithImprovedSearch];
+  globalState.loadingData = false;
 }
 
 //Inicio da aplicacao. start no final do codigo
 async function start() {
   await fetchFavorites();
-  console.log(globalallFovorites);
+  console.log(globalState.allFovorites);
 }
 
 async function handleButtonClick() {
@@ -94,7 +96,7 @@ async function addFavorito(id) {
     method: "POST",
   });
   const json = await resource.json();
-  globalloadingData = false;
+  globalState.loadingData = false;
 
   M.toast({ html: "Cadastrado com Sucesso!", classes: "rounded" });
   document.querySelector("#" + id).parentElement.parentElement.style.display =
@@ -107,7 +109,8 @@ async function deleteFavorite(id) {
   const resource = await fetch(url);
 
   const json = await resource.json();
-  globalloadingData = false;
+
+  globalState.loadingData = false;
 
   M.toast({ html: "Removido dos Favoritos!", classes: "rounded" });
 
@@ -124,25 +127,31 @@ async function fetchFavorites() {
     return item;
   });
 
-  globalallFovorites = [...jsonWithImprovedSearch];
-  globalloadingData = false;
+  globalState.allFovorites = [...jsonWithImprovedSearch];
+  globalState.loadingData = false;
 }
+
 function renderFavorites() {
   const { allFovorites } = globalState;
-  const booksToShow = allFovorites
-    .map((book) => {
-      return renderFavorite(book);
+  const perPageFavorites = 10;
+   
+    const booksToShow = allFovorites
+    .map((book,i) => { 
+       if(i >= globalState.start && i <= globalState.end ) { return renderFavorite(book) };
     })
     .join("");
-    //Math.ceil(dadostabela.length / perPage)
-totalPage = 2;
+  
+  
+  globalState.totalPage == 1 ? globalState.totalPage = Math.ceil(allFovorites.length / perPageFavorites) :  console.log(true) 
+
+  console.log(globalState.totalPage);
   const renderedHTML = `
      <div>
        <h2>${allFovorites.length} favorito(s) encontrado(s)</h2>
        <div class='row'>
          ${booksToShow}
        </div>
-       ${ totalPage == 1 ? "" : globalPagination}
+       ${ globalState.totalPage == 1 ? "" : globalPagination}
      </div>
   `;
 
@@ -150,7 +159,7 @@ totalPage = 2;
 }
 
 async function renderBooks(){
-  const { allBooks, totalItens, allFovorites } = globalState;
+  const { allBooks, totalItems, allFovorites } = globalState;
 
   for (let i = 0; i < allFovorites.length; i++) {
     const element = allFovorites[i].id;
@@ -169,7 +178,7 @@ async function renderBooks(){
 
   const renderedHTML = `
      <div>
-       <h2>${totalItens} livro(os) encontrado(s)</h2>
+       <h2>${totalItems} livro(os) encontrado(s)</h2>
        <div class='row'>
          ${booksToShow}
        </div>
@@ -243,7 +252,11 @@ const controls = {
     if (lastPage) {
 			globalState.page--;
 		}
-        
+        alert(1)
+        var pagina = state.page - 1;
+		var start = pagina * state.perPage;
+		var end = start + state.perPage;
+	
 		/* var elemPage = document.querySelector(".pagePrincipal");
 				elemPage.innerHTML = globalState.page; */
   },
@@ -268,11 +281,11 @@ const controls = {
 	createListeners(){
 		document.querySelector(".proxima").addEventListener('click', () => {
 			controls.next();
-			update();
+      renderFavorites();
 		})
 		document.querySelector(".voltar").addEventListener('click', () => {
 			controls.prev();
-			update();
+			renderFavorites();
 		})
 	}
 }

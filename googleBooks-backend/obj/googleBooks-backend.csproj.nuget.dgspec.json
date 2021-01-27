@@ -1,30 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {}
+    "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {
+    "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
+        "projectUniqueName": "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
         "projectName": "googleBooks-backend",
-        "projectPath": "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
-        "packagesPath": "C:\\Users\\LOS PUTOS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LOS PUTOS\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\obj\\",
+        "projectPath": "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\googleBooks-backend.csproj",
+        "packagesPath": "C:\\Users\\ASUS-LAB245\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ASUS-LAB245\\Desktop\\lyncas\\dotnet-c-sharp\\googleBooks-backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\LOS PUTOS\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ASUS-LAB245\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net5.0"
+          "netcoreapp3.1"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net5.0": {
-            "targetAlias": "net5.0",
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -35,20 +35,12 @@
         }
       },
       "frameworks": {
-        "net5.0": {
-          "targetAlias": "net5.0",
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "FileContextCore": {
               "target": "Package",
               "version": "[3.4.0, )"
-            },
-            "Microsoft.AspNetCore.Cors": {
-              "target": "Package",
-              "version": "[2.2.0, )"
-            },
-            "Microsoft.AspNetCore.Mvc": {
-              "target": "Package",
-              "version": "[2.2.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -83,7 +75,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }
