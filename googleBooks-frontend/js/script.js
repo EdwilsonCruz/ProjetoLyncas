@@ -7,16 +7,17 @@ const globalState = {
   allFovorites: [],
   loadingData: true,
   totalItems: 0,
-  page:1,
-  perPage :40,
+  page: 1,
+  perPage: 40,
   totalPage: 1,
-  start:0, end:9,
+  start: 0, end: 9,
+  perPageFavorites: 10
 };
 
 const globalPagination = `<div>
   <ul class='pagination'>
     <li class='waves-effect'><a class='voltar'><i class='material-icons'>chevron_left</i></a></li>
-    <li class="active"><a href="">1</a></li>
+    <li class="active"><a id='page'>1</a></li>
     <li class="waves-effect"><a class='proxima'><i class="material-icons">chevron_right</i></a></li>
   </ul></div>`;
 
@@ -33,7 +34,7 @@ async function fetchAll(term) {
   const resource = await fetch(url);
   const itemsFilter = globalState.allFovorites;
   const json = await resource.json();
-  
+
   globalState.totalItems = json.totalItems
 
   let jsonWithImprovedSearch = json.items.map((item) => {
@@ -55,7 +56,7 @@ async function fetchAll(term) {
 }
 
 //Inicio da aplicacao. start no final do codigo
-async function start() {
+async function initStart() {
   await fetchFavorites();
   console.log(globalState.allFovorites);
 }
@@ -83,6 +84,7 @@ async function handleCheckedClick() {
 
     await fetchFavorites();
     renderFavorites();
+    controls.createListeners();
   } else {
     globalInputName.disabled = false;
     globalButton.disabled = false;
@@ -119,46 +121,52 @@ async function deleteFavorite(id) {
 }
 
 async function fetchFavorites() {
-  const url = "http://localhost:5000/api/book/favorites";
-  const resource = await fetch(url);
-  const json = await resource.json();
+  try {
+    const url = "http://localhost:5000/api/book/favorites";
+    const resource = await fetch(url);
+    const json = await resource.json();
 
-  const jsonWithImprovedSearch = json.map((item) => {
-    return item;
-  });
+    const jsonWithImprovedSearch = json.map((item) => {
+      return item;
+    });
 
-  globalState.allFovorites = [...jsonWithImprovedSearch];
-  globalState.loadingData = false;
+    globalState.allFovorites = [...jsonWithImprovedSearch];
+    globalState.loadingData = false;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function renderFavorites() {
   const { allFovorites } = globalState;
-  const perPageFavorites = 10;
-   
-    const booksToShow = allFovorites
-    .map((book,i) => { 
-       if(i >= globalState.start && i <= globalState.end ) { return renderFavorite(book) };
+  
+  globalState.totalPage == 1 ? globalState.totalPage = Math.ceil(allFovorites.length / globalState.perPageFavorites) : console.log(false)
+
+  const booksToShow = allFovorites
+    .map((book, i) => {
+      if (i >= globalState.start && i <= globalState.end) { return renderFavorite(book) };
     })
     .join("");
+
   
-  
-  globalState.totalPage == 1 ? globalState.totalPage = Math.ceil(allFovorites.length / perPageFavorites) :  console.log(true) 
 
   console.log(globalState.totalPage);
+
   const renderedHTML = `
      <div>
        <h2>${allFovorites.length} favorito(s) encontrado(s)</h2>
        <div class='row'>
          ${booksToShow}
        </div>
-       ${ globalState.totalPage == 1 ? "" : globalPagination}
+       ${globalState.totalPage == 1 ? "" : globalPagination}
      </div>
   `;
 
   globaldivBooks.innerHTML = renderedHTML;
+
 }
 
-async function renderBooks(){
+async function renderBooks() {
   const { allBooks, totalItems, allFovorites } = globalState;
 
   for (let i = 0; i < allFovorites.length; i++) {
@@ -250,44 +258,49 @@ const controls = {
     globalState.page++
     const lastPage = globalState.page > globalState.totalPage;
     if (lastPage) {
-			globalState.page--;
-		}
-        alert(1)
-        var pagina = state.page - 1;
-		var start = pagina * state.perPage;
-		var end = start + state.perPage;
-	
-		/* var elemPage = document.querySelector(".pagePrincipal");
-				elemPage.innerHTML = globalState.page; */
+      globalState.page--;
+    }
+    
+    var pagina = globalState.page - 1;
+    globalState.start = pagina * globalState.perPageFavorites;
+    globalState.end = (globalState.start-1) + globalState.perPageFavorites;
   },
   prev(){
     globalState.page--
-    if(globalState.page<1){
-      globalState.page++
-		}
-		/* var elemPage = document.querySelector(".pagePrincipal");
-				elemPage.innerHTML = globalState.page; */
+
+    if (globalState.page < 1) {
+       globalState.page++
+    }
+      var pagina = globalState.page - 1;
+      globalState.start = pagina * globalState.perPageFavorites;
+      globalState.end = (globalState.start-1) + globalState.perPageFavorites; 
+    
   },
-  goTo(page){
-    if (page < 1){
-    	page = 1;
+
+  goTo(page) {
+    if (page < 1) {
+      page = 1;
     }
     globalState.page = page;
     if (page > globalState.totalPage) {
       globalState.page = globalState.totalPage
-		}
-		document.querySelector(".pagePrincipal").innerHTML = globalState.page;
-	},
-	createListeners(){
-		document.querySelector(".proxima").addEventListener('click', () => {
-			controls.next();
+    }
+    document.querySelector(".pagePrincipal").innerHTML = globalState.page;
+  },
+  createListeners() {
+    document.querySelector(".proxima").addEventListener('click', () => {
+      controls.next();
       renderFavorites();
-		})
-		document.querySelector(".voltar").addEventListener('click', () => {
-			controls.prev();
-			renderFavorites();
-		})
-	}
+      document.querySelector('#page').innerHTML =globalState.page;
+      controls.createListeners();
+    })
+    document.querySelector(".voltar").addEventListener('click', () => {
+      controls.prev();
+      renderFavorites();
+      document.querySelector('#page').innerHTML =globalState.page;
+      controls.createListeners();
+    })
+  }
 }
 
-start();
+initStart();
